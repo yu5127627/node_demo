@@ -1,0 +1,29 @@
+version: "3.7"
+
+services:
+  mysql:
+    image: mysql:5.7
+    volumes:
+      - todo-mysql-data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: todos
+
+  server:
+    image: node:12-alpine
+    command: sh -c "npm install && node app.js"
+    ports:
+      - 8000:8000
+    working_dir: /app
+    volumes:
+      - ./:/app
+    environment:
+      DB_HOST: mysql
+      DB_USERNAME: root
+      DB_PASSWORD: 123456
+      DB_DATABASE: todos
+      APP_POST: 8000
+      NODE_ENV: production
+
+volumes:
+  todo-mysql-data:
